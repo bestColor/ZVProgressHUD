@@ -3,7 +3,7 @@
 //  ZVProgressHUD
 //
 //  Created by zevwings on 2017/7/13.
-//  Copyright © 2017年 zevwings. All rights reserved.
+//  Copyright © 2017-2019 zevwings. All rights reserved.
 //
 
 import UIKit
@@ -11,20 +11,6 @@ import ZVActivityIndicatorView
 
 public class IndicatorView: UIView {
 
-    public enum IndicatorType {
-        case none
-        case error, success, warning
-        case indicator(style: AnimationType)
-        case progress(value: Float)
-        case image(value: UIImage, dismissAtomically: Bool)
-        case animation(value: [UIImage], duration: TimeInterval)
-    }
-    
-    public enum AnimationType {
-        case flat
-        case native
-    }
-    
     var strokeWidth: CGFloat = 3.0 {
         didSet {
             flatActivityIndicatorView?.strokeWidth = strokeWidth
@@ -38,24 +24,17 @@ public class IndicatorView: UIView {
                 switch (style) {
                 case .native:
                     configNativeActivityIndicatorView()
-                    break
                 case .flat:
                     configFlatActivityIndicatorView()
-                    break
                 }
-                break
             case .progress(let value):
                 configProgressIndicatorView(with: value)
-                break
             case .error, .success, .warning:
                 configImageIndicatorView(indcatorType.resource)
-                break
             case .image(let value, _):
                 configImageIndicatorView(value)
-                break
             case .animation(let value, let duration):
                 configImageIndicatorView(value, animationDuration: duration)
-                break
             default:
                 break
             }
@@ -65,7 +44,7 @@ public class IndicatorView: UIView {
     
     private var imageIndicaotorView: UIImageView?
     private var nativeActivityIndicatorView: UIActivityIndicatorView?
-    private var flatActivityIndicatorView: ZVActivityIndicatorView?
+    private var flatActivityIndicatorView: ActivityIndicatorView?
     private var progressIndicatorView: ProgressView?
     
     convenience init() {
@@ -135,9 +114,9 @@ private extension IndicatorView {
             addSubview(imageIndicaotorView!)
         }
         
-        if let resource = value as? String {
+        if let resource = value as? String,
+            let path = Bundle(for: ProgressHUD.self).path(forResource: "Resource", ofType: "bundle") {
             
-            guard let path = Bundle(for: ZVProgressHUD.self).path(forResource: "Resource", ofType: "bundle") else { return }
             let bundle = Bundle(path: path)
             guard let fileName = bundle?.path(forResource: resource, ofType: "png") else { return }
             let image = UIImage(contentsOfFile: fileName)?.withRenderingMode(.alwaysTemplate)
@@ -226,7 +205,7 @@ private extension IndicatorView {
         progressIndicatorView?.removeFromSuperview()
 
         if flatActivityIndicatorView == nil {
-            flatActivityIndicatorView = ZVActivityIndicatorView()
+            flatActivityIndicatorView = ActivityIndicatorView()
             flatActivityIndicatorView?.tintColor = tintColor
             flatActivityIndicatorView?.hidesWhenStopped = true
             flatActivityIndicatorView?.strokeWidth = strokeWidth
@@ -239,40 +218,3 @@ private extension IndicatorView {
         flatActivityIndicatorView?.startAnimating()
     }
 }
-
-// MARK: - IndicatorView.IndicatorType
-
-extension IndicatorView.IndicatorType {
-    
-    var resource: String {
-        switch self {
-        case .error:
-            return "error"
-        case .success:
-            return "success"
-        case .warning:
-            return "warning"
-        default:
-            return ""
-        }
-    }
-    
-    var shouldHidden: Bool {
-        switch self {
-        case .none:
-            return true
-        default:
-            return false
-        }
-    }
-    
-    var progressValueChecker: (Bool, Float) {
-        switch self {
-        case .progress(let value):
-            return (true, value)
-        default:
-            return (false, 0.0)
-        }
-    }
-}
-

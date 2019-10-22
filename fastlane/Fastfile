@@ -1,0 +1,26 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:ios)
+
+platform :ios do
+
+  desc "Build and upload to appetize"
+  lane :upload_appetize do |options|
+    git_pull
+	build_and_upload_to_appetize(scheme: "ZVProgressHUDExample", api_token: "tok_8hajudt52c6921vcq5pzht6u4c", public_key: "39txw9h5d7mrkckm6f9vp9mn2r")
+  end
+
+end

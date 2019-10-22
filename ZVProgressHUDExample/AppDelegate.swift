@@ -3,7 +3,7 @@
 //  ZVProgressHUDExample
 //
 //  Created by zevwings on 12/02/2018.
-//  Copyright © 2018 zevwings. All rights reserved.
+//  Copyright © 2017-2019 zevwings. All rights reserved.
 //
 
 import UIKit
@@ -14,7 +14,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
 
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         return true
     }
